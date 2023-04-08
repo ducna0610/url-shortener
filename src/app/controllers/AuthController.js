@@ -4,7 +4,11 @@ import User from "../models/User.js";
 import jwtHelper from "../helpers/jwt.helper.js";
 import validateHelper from "../helpers/validate.helper.js";
 import bcrypt from "bcryptjs";
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
+import { promisify } from 'util';
+import fs from 'fs';
+
+const readFile = promisify(fs.readFile);
 
 export default {
     register: (req, res) => {
@@ -57,19 +61,22 @@ export default {
                 httpOnly: true, // The cookie only accessible by the web
             });
 
+            
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                  user: process.env.MAIL_USERNAME,
-                  pass: process.env.MAIL_PASSWORD
-                }
-              });
+                    user: process.env.MAIL_USERNAME,
+                    pass: process.env.MAIL_PASSWORD,
+                },
+            });
+
+            let html = await readFile("../../src/views/mail/welcome.html", "utf8");
 
             const mailBody = {
                 from: process.env.EMAIL,
                 to: "ducna0610@gmail.com",
-                subject: "Register success",
-                html: "<h1>Thanks for your using.</h1>"
+                subject: "TEST",
+                html: html,
             };
 
             transporter.sendMail(mailBody, function (error, info) {
