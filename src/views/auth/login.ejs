@@ -1,0 +1,54 @@
+
+<div class="text-center mt-4">
+    <h1 class="h2">Form login</h1>
+    <p class="lead">
+        Welcome you go back.
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="m-sm-4">
+            <form method="post">
+                <div class="mb-4">
+                    <label class="form-label">Email</label>
+                    <input
+                        class="form-control form-control-lg"
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                        value=<%= errors?.email?.value %>
+                    >
+                    <div class="text-danger">
+                        <% errors?.email?.msg?.forEach(function(err) { %> 
+                            <%= err %>
+                        <% }); %>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input
+                        class="form-control form-control-lg"
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                    />
+                </div>
+                <div class="text-center mt-3">
+                    <a
+                        href="forgot-password"
+                        >Forgot password</a
+                    >
+                    <a
+                        href="/register"
+                        class="btn btn-lg btn-info"
+                        >Register</a
+                    >
+                    <button type="submit" class="btn btn-lg btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

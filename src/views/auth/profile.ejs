@@ -1,0 +1,40 @@
+<div class="card">
+    <div class="card-header">Profile
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    value="<%= user.email %>"
+                    disabled
+                />
+            </div>
+            <div class="mb-3">
+                <label class="form-label"
+                    >Name</label>
+                <input class="form-control" name="name" required
+                    value='<%= user.name %>'
+                />
+                <div class="text-danger">
+                    <% errors?.name?.msg?.forEach(function(err) { %> 
+                    <%= err %>
+                     <% }); %>
+                </div>
+            </div>
+            <a href="" class="btn btn-warning">Change password</a>
+            <button class="btn btn-success">
+                Update
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<% if (alert == 'updated') { %>
+    <script>
+    alertUpdated();
+    </script>
+<% } %>

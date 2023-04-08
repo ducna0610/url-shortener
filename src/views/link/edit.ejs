@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="card-header">
+        <button class="btn btn-warning" style="padding: 10px 14px; margin-right: 6px; margin-bottom: 8px;" onclick="window.history.back()">
+            <i  class="align-middle" data-feather="arrow-left"></i>
+        </button>
+        <h4 class="card-title">Edit link</h4>
+        <form action="" method="post">
+
+            <input type="text" name="full" 
+            style="padding: 6px; width: 60%; margin-right: 8px;"
+            placeholder="https://pornhub.com"
+            value='<%= (link.full) %>'
+            >
+            <button class="btn btn-success" style="padding: 10px 14px;">
+                <i  class="align-middle" data-feather="edit"></i>
+            </button>
+            <div class="text-danger">
+                <% errors?.full?.msg?.forEach(function(err) { %> 
+                    <%= err %>
+                <% }); %>
+            </div>
+        </form>
+  
+    </div>
+</div>

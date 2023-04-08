@@ -1,0 +1,218 @@
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Create new link</h4>
+        <form action="" method="post">
+            <input
+                type="text"
+                name="full"
+                style="padding: 6px; width: 60%; margin-right: 8px"
+                placeholder="https://pornhub.com"
+                value="<%= (errors?.full?.value) %>"
+            />
+            <button class="btn btn-success" style="padding: 10px 14px">
+                <i class="align-middle" data-feather="plus"></i>
+            </button>
+            <div class="text-danger">
+                <% errors?.full?.msg?.forEach(function(err) { %> 
+                <%= err %>
+                 <% }); %>
+            </div>
+        </form>
+    </div>
+    <% if (links.length) { %>
+     
+    <div class="card-content">
+        <!-- table bordered -->
+        <div class="table-responsive">
+            <table class="table table-bordered mb-0">
+                <thead>
+                    <tr width="100%">
+                        <th width="40%">Full</th>
+                        <th width="20%">Short</th>
+                        <th width="10%">Clicks</th>
+                        <th width="30%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% links.forEach(link => { %>
+                    <tr width="100%">
+                        <td class="text-bold-500" width="69%">
+                            <a href=<%= link.full %> target="_blank">
+                                <%= link.full %>
+                            </a>
+                        </td>
+                        <td width="20%">
+                                <%= link.short %>
+                        </td>
+                        <td class="text-bold-500" width="10%">
+                            <%= link.clicks %>
+                        </td>
+                        <td width="1%">
+                            <button
+                                class="btn btn-primary m-1"
+                                data-short=<%= link.short %>
+                                onclick="copyContent(this)">
+                                <i
+                                    style="height: 30px"
+                                    class="align-middle"
+                                    data-feather="copy"
+                                ></i>
+                            </button>
+                            <a
+                                class="btn btn-warning m-1"
+                                href="/link/edit/<%= link._id %>?page=<%= page %>"
+                            >
+                                <i
+                                    style="height: 30px"
+                                    class="align-middle"
+                                    data-feather="edit"
+                                ></i>
+                            </a>
+                            <form
+                                action="/link/delete/<%= link._id %>"
+                                method="post"
+                            >
+                                <button class="btn btn-danger m-1">
+                                    <i
+                                        style="height: 30px"
+                                        class="align-middle"
+                                        data-feather="trash"
+                                    ></i>
+                                </button>
+                            </form>
+                            <a
+                                class="btn m-1"
+                                href="/link/detail/<%= link._id %>"
+                            >
+                                <i
+                                    style="height: 30px"
+                                    class="align-middle"
+                                    data-feather="more-horizontal"
+                                ></i>
+                            </a>
+                        </td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- pagination -->
+    <div id="wrapper">
+          <ul id="pagination">
+            <% if (page == 1) {%>
+                <li><a>«</a></li>
+                <%} else {%>
+                    <li><a href="?page=<%= page-1 %>">«</a></li>
+            <% } %>
+            
+            <% if (pages < range) { %>
+                <% for( let i = 1; i <= pages; i++ ) { %>
+                    <% if (page == i) {%>
+                        <li><a href="#" class="active"><%= i %></a></li>
+                    <%} else {%>
+                        <li><a href="?page=<%= i %>"><%= i %></a></li>
+                    <% } %>
+                <% } %>
+            <% } else { %>
+                <% if (page == 1) {%>
+                    <li><a href="#" class="active">1</a></li>
+                <%} else {%>
+                    <li><a href="?page=1">1</a></li>
+                <% } %>
+
+                
+                <% for( let i = start; i <= end; i++ ) { %>
+                    <% if (page == i) {%>
+                        <li><a href="#" class="active"><%= i %></a></li>
+                    <%} else {%>
+                        <li><a href="?page=<%= i %>"><%= i %></a></li>
+                    <% } %>
+                <% } %>
+
+                
+                <% if (page == pages) {%>
+                    <li><a href="#" class="active"><%= pages %></a></li>
+                <%} else {%>
+                    <li><a href="?page=<%= pages %>"><%= pages %></a></li>
+                <% } %>
+
+            <% } %>
+            
+            <% if (page == pages) {%>
+                <li><a>»</a></li>
+                <%} else {%>
+                    <li><a href="?page=<%= page+1 %>">»</a></li>
+            <% } %>
+          </ul> 
+    </div><!--wrapper-->
+    <% } else { %>
+        <div class="card-body">
+         No data
+     </div>
+    <% } %>
+</div>
+
+<style>
+    html, 
+body {
+  font: 100%/1.5 Verdana, sans-serif
+}
+#wrapper {
+  margin: 20px auto;
+  display: block;
+  width: 100%;
+}
+.page-header {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: normal;
+  border-bottom: 1px solid #ddd;
+  margin: 30px 0
+}
+#pagination {
+  margin: 0;
+  padding: 0;
+  text-align: center
+}
+#pagination li {
+  display: inline
+}
+#pagination li a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 5px 10px;
+  color: #000
+}
+
+/* Active and Hoverable Pagination */
+#pagination li a {
+  border-radius: 5px;
+  -webkit-transition: background-color 0.3s;
+  transition: background-color 0.3s
+    
+}
+#pagination li a.active {
+  background-color: #4caf50;
+  color: #fff
+}
+#pagination li a:hover:not(.active) {
+  background-color: #ddd;
+} 
+</style>
+
+<% if (alert == 'created') { %>
+    <script>
+    alertCreated();
+    </script>
+<% } %>
+<% if (alert == 'updated') { %>
+    <script>
+    alertUpdated();
+    </script>
+<% } %>
+<% if (alert  == 'deleted') { %>
+    <script>
+      alertDeleted();
+    </script>
+<% } %>

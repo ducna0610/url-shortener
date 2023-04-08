@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs') %>
+  </head>
+  <body>
+    <div class="wrapper">
+      <%- include('../partials/sidebar.ejs') %>
+
+      <div class="main">
+        <%- include('../partials/navbar.ejs') %>
+        <main class="content">
+          <div class="container-fluid p-0">
+            <div class="row">
+              <div class="col-12">
+                <%- body %>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <%- include('../partials/footer.ejs') %>
+      </div>
+    </div>
+
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <%- script %>
+
+  </body>
+</html>
