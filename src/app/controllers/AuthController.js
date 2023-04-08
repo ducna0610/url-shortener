@@ -27,6 +27,19 @@ export default {
     },
     processRegister: async (req, res) => {
         try {
+            let isEmailExist = await User.findOne({ email: req.body.email });
+            if(isEmailExist) {
+                let errors = {
+                    email: {
+                        value: req.body.email,
+                        msg: [`Email is existed!`],
+                    },
+                };
+
+                req.session.errors = errors;
+                return res.redirect("/register");
+            }
+
             let errors = validateHelper.getErrors(req);
             req.session.errors = errors;
 
@@ -111,7 +124,6 @@ export default {
             const user = await User.findOne({ email: req.body.email });
 
             if (user === null) {
-                console.log(1);
                 let errors = {
                     email: {
                         value: req.body.email,
