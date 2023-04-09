@@ -2,6 +2,7 @@ import validateHelper from "../helpers/validate.helper.js";
 import Link from "../models/Link.js";
 import { nanoid } from "nanoid";
 import QRCode from "qrcode";
+import { unlink } from 'node:fs/promises';
 
 export default {
     index: async (req, res) => {
@@ -119,7 +120,7 @@ export default {
                 process.env.HOST_NAME + link.short,
                 {
                     color: {
-                        dark: "#00F", // Blue dots
+                        dark: "#120C41",
                         light: "#0000", // Transparent background
                     },
                     type: "url",
@@ -168,7 +169,7 @@ export default {
             process.env.HOST_NAME + link.short,
             {
                 color: {
-                    dark: "#00F", // Blue dots
+                    dark: "#120C41",
                     light: "#0000", // Transparent background
                 },
                 type: "url",
@@ -192,21 +193,26 @@ export default {
             const link = await Link.findOne({ _id: link_id });
 
             if (!link) {
-                return res.status(400).send({ error: "Link not found" });
+                // return res.status(400).send({ error: "Link not found" });
+                return res.redirect('/');
             }
 
             if (link.user_id.equals(req.user._id) === false) {
-                return res.status(400).send({
-                    error: "You don't have permission to delete this link",
-                });
+                // return res.status(400).send({
+                //     error: "You don't have permission to delete this link",
+                // });
+                return res.redirect('/');
             } else {
                 await Link.deleteOne({ _id: link_id });
+
+                var filePath = './src/public/assets/img/qr/' + link.short + '.png'; 
+                await unlink(filePath);
 
                 req.session.alert = "deleted";
                 res.redirect("/link");
             }
         } catch (e) {
-            // console.log(e);
+            console.log(e);
             return res.redirect("/");
         }
     },
