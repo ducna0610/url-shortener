@@ -83,7 +83,7 @@ export default {
                 },
             });
 
-            let html = await readFile("../url-shortener/src/views/mail/welcome.html", "utf8");
+            let html = await readFile("./src/views/mail/welcome.html", "utf8");
 
             const mailBody = {
                 from: process.env.EMAIL,
