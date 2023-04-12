@@ -6,11 +6,13 @@
       </a>
 
       <ul class="sidebar-nav">
-        <% if (user) { %>
         <li class="sidebar-header">
-          User
-        </li>
-        <% } %>
+        <% if (user.role) { %>
+          Admin
+          <% } else { %>
+            User
+            <% } %>
+          </li>
 
             <% if (title == "Home") { %>
               <li class="sidebar-item active">
