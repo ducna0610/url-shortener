@@ -3,13 +3,13 @@ dotenv.config();
 import User from "../models/User.js";
 import jwt from "../utils/jwt.js";
 import validate from "../utils/validate.js";
+import mailer from "../utils/mailer.js";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
-import { promisify } from 'util';
-import fs from 'fs';
+import ejs from "ejs";
+import { promisify } from "util";
+import fs from "fs";
 
 const readFile = promisify(fs.readFile);
-
 export default {
     register: (req, res) => {
         if (req.cookies.token) {
@@ -28,7 +28,7 @@ export default {
     processRegister: async (req, res) => {
         try {
             let isEmailExist = await User.findOne({ email: req.body.email });
-            if(isEmailExist) {
+            if (isEmailExist) {
                 let errors = {
                     email: {
                         value: req.body.email,
@@ -74,31 +74,13 @@ export default {
                 httpOnly: true, // The cookie only accessible by the web
             });
 
-            
-            const transporter = nodemailer.createTransport({
-                service: "gmail",
-                auth: {
-                    user: process.env.MAIL_USERNAME,
-                    pass: process.env.MAIL_PASSWORD,
-                },
+            let html = await readFile("./src/views/mail/welcome.ejs", "utf8");
+            let htmlContent = ejs.render(html, {
+                APP_URL: process.env.APP_URL,
+                username: user.name,
+                password: req.body.password,
             });
-
-            let html = await readFile("./src/views/mail/welcome.html", "utf8");
-
-            const mailBody = {
-                from: process.env.EMAIL,
-                to: "ducna0610@gmail.com",
-                subject: "TEST",
-                html: html,
-            };
-
-            transporter.sendMail(mailBody, function (error, info) {
-                if (error) {
-                    console.log(error);
-                }
-
-                console.log("Email with attachment delivered successfully");
-            });
+            mailer.sendMail(user.email, "Register Success!", htmlContent);
 
             return res.redirect("/");
         } catch (e) {
@@ -109,7 +91,7 @@ export default {
         if (req.cookies.token) {
             return res.redirect("/");
         }
-        
+
         let errors = req.session.errors;
         delete req.session.errors;
 
@@ -172,13 +154,12 @@ export default {
     },
     showProfile: (req, res) => {
         try {
-            
             let errors = req.session.errors;
             delete req.session.errors;
-            
+
             let alert = req.session.alert;
             delete req.session.alert;
-            
+
             res.render("auth/profile", {
                 title: "Profile",
                 user: req.user,
@@ -192,23 +173,22 @@ export default {
     },
     updateProfile: async (req, res) => {
         try {
-            
             let errors = validate.getErrors(req);
             req.session.errors = errors;
-            
+
             const user = await User.findOneAndUpdate(
                 { _id: req.user._id },
-            {
-                name: req.body.name,
-            },
-            { new: true }
+                {
+                    name: req.body.name,
+                },
+                { new: true }
             );
-            
+
             req.session.alert = "updated";
-            
-            return res.redirect('/profile');
+
+            return res.redirect("/profile");
         } catch (error) {
-            return res.redirect("/");    
+            return res.redirect("/");
         }
     },
     logout: (req, res) => {
