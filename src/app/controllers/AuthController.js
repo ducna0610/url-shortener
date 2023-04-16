@@ -1,8 +1,8 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import User from "../models/User.js";
-import jwtHelper from "../helpers/jwt.helper.js";
-import validateHelper from "../helpers/validate.helper.js";
+import jwt from "../utils/jwt.js";
+import validate from "../utils/validate.js";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 import { promisify } from 'util';
@@ -40,7 +40,7 @@ export default {
                 return res.redirect("/register");
             }
 
-            let errors = validateHelper.getErrors(req);
+            let errors = validate.getErrors(req);
             req.session.errors = errors;
 
             if (errors) {
@@ -63,7 +63,7 @@ export default {
             const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
             const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-            const accessToken = await jwtHelper.generateToken(
+            const accessToken = await jwt.generateToken(
                 user._id,
                 accessTokenSecret,
                 accessTokenLife
@@ -153,7 +153,7 @@ export default {
             const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
             const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-            const accessToken = await jwtHelper.generateToken(
+            const accessToken = await jwt.generateToken(
                 user._id,
                 accessTokenSecret,
                 accessTokenLife
@@ -193,7 +193,7 @@ export default {
     updateProfile: async (req, res) => {
         try {
             
-            let errors = validateHelper.getErrors(req);
+            let errors = validate.getErrors(req);
             req.session.errors = errors;
             
             const user = await User.findOneAndUpdate(

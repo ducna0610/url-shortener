@@ -1,4 +1,4 @@
-import validateHelper from "../helpers/validate.helper.js";
+import validate from "../utils/validate.js";
 import Link from "../models/Link.js";
 import { nanoid } from "nanoid";
 import QRCode from "qrcode";
@@ -98,7 +98,7 @@ export default {
     },
     update: async (req, res) => {
         try {
-            let errors = validateHelper.getErrors(req);
+            let errors = validate.getErrors(req);
             req.session.errors = errors;
 
             let page = req.query.page || 1;
@@ -141,7 +141,7 @@ export default {
     store: async (req, res) => {
         try {
             
-            let errors = validateHelper.getErrors(req);
+            let errors = validate.getErrors(req);
             req.session.errors = errors;
             
             if (errors) {

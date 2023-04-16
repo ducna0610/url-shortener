@@ -1,4 +1,4 @@
-import jwtHelper from "../helpers/jwt.helper.js";
+import jwt from "../utils/jwt.js";
 import User from "../models/User.js";
 
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
@@ -10,7 +10,7 @@ export default {
             return res.redirect("/login");
         }
 
-        const data = await jwtHelper.verifyToken(
+        const data = await jwt.verifyToken(
             req.cookies.token,
             accessTokenSecret
         );
