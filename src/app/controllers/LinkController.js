@@ -117,7 +117,7 @@ export default {
 
             await QRCode.toFile(
                 "./src/public/assets/img/qr/" + link.short + ".png",
-                process.env.HOST_NAME + link.short,
+                `${process.env.APP_URL}/${link.short}`,
                 {
                     color: {
                         dark: "#120C41",
@@ -166,7 +166,7 @@ export default {
         
         await QRCode.toFile(
             "./src/public/assets/img/qr/" + link.short + ".png",
-            process.env.HOST_NAME + link.short,
+            `${process.env.APP_URL}/${link.short}`,
             {
                 color: {
                     dark: "#120C41",

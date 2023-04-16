@@ -40,7 +40,7 @@ app.use(session(sess));
 
 app.use("/assets", express.static("./src/public/assets/"));
 
-mongoose.connect(process.env.URL_DATABASE)
+mongoose.connect(process.env.URL_MONGO)
   .then(() => console.log('Connected!'));
 
 web.initWebRoute(app);
